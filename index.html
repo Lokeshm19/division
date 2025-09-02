@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>📱 Thanu Homework • Long Division Visualizer</title>
+  <style>
+    body {
+      font-family: "Courier New", monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: #0f172a; /* dark navy background */
+      padding: 20px;
+      margin: 0;
+      color: #e2e8f0; /* light text */
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      color: #38bdf8; /* sky blue */
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #facc15; /* yellow branding */
+      text-align: center;
+    }
+
+    .inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    input, button {
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      width: 100%;
+      box-sizing: border-box;
+      background: #1e293b; /* dark input bg */
+      color: #f8fafc;
+    }
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
+    button {
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: 0.3s;
+    }
+
+    button:active {
+      background: #0ea5e9;
+      transform: scale(0.98);
+    }
+
+    .division-box {
+      font-size: 1rem;
+      line-height: 1.6;
+      white-space: pre;
+      padding: 16px;
+      background: #1e293b; /* card bg */
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      width: 100%;
+      max-width: 340px;
+      overflow-x: auto;
+      color: #f1f5f9;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📘 Thanu Homework</h2>
+  <h1>📐 Long Division Visualizer</h1>
+
+  <div class="inputs">
+    <input type="number" id="dividend" placeholder="Enter Dividend" />
+    <input type="number" id="divisor" placeholder="Enter Divisor" />
+    <button onclick="drawDivision()">Calculate</button>
+  </div>
+
+  <div class="division-box" id="divisionBox">
+    <!-- Division steps will appear here -->
+  </div>
+
+<script>
+function drawDivision() {
+  const dividend = parseInt(document.getElementById("dividend").value);
+  const divisor = parseInt(document.getElementById("divisor").value);
+  const box = document.getElementById("divisionBox");
+
+  if (isNaN(dividend) || isNaN(divisor) || divisor === 0) {
+    box.textContent = "⚠️ Please enter valid numbers (divisor cannot be 0).";
+    return;
+  }
+
+  const quotient = Math.floor(dividend / divisor);
+  const remainder = dividend % divisor;
+
+  let result = "";
+
+  // First line: divisor | dividend | quotient
+  result += divisor + " | " + dividend + " | " + quotient + "\n";
+
+  // Simulate long division steps
+  let cur = 0;
+  const digits = String(dividend).split("");
+
+  for (let i = 0; i < digits.length; i++) {
+    cur = cur * 10 + parseInt(digits[i]);
+
+    if (cur >= divisor) {
+      let q = Math.floor(cur / divisor);
+      let sub = q * divisor;
+      let rem = cur - sub;
+
+      // Align subtraction under the number
+      let spaces = " ".repeat(3 + i);
+      result += spaces + sub + "\n";
+      result += spaces + "-".repeat(String(sub).length) + "\n";
+
+      cur = rem;
+    }
+  }
+
+  // Final remainder
+  result += " ".repeat(String(dividend).length + 3) + remainder + "\n";
+
+  box.textContent = result;
+}
+</script>
+
+</body>
+</html>
